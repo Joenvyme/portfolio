@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
+import { gsap, useGSAP } from "../lib/gsap";
 
 type RevealProps = {
   children: ReactNode;
@@ -16,34 +17,45 @@ export default function Reveal({
   as = "div",
 }: RevealProps) {
   const ref = useRef<HTMLElement | null>(null);
-  const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
+  useGSAP(
+    () => {
+      const el = ref.current;
+      if (!el) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
+      const reduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      if (reduce) {
+        gsap.set(el, { opacity: 1, y: 0 });
+        return;
+      }
+
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 36 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          delay: delay / 1000,
+          scrollTrigger: {
+            trigger: el,
+            start: "top 88%",
+            once: true,
+          },
         }
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+      );
+    },
+    { scope: ref, dependencies: [] }
+  );
 
   const Tag = as as any;
 
   return (
-    <Tag
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`reveal ${visible ? "is-visible" : ""} ${className}`}
-    >
+    <Tag ref={ref} className={className} style={{ opacity: 0 }}>
       {children}
     </Tag>
   );

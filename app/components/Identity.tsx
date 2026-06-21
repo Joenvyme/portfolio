@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import Marquee from "./Marquee";
 
 const marqueeItems = [
   "Next.js",
@@ -15,20 +16,8 @@ const marqueeItems = [
 export default function Identity() {
   return (
     <section id="identity" className="relative border-t border-white/5 py-20 md:py-40">
-      {/* Marquee band */}
-      <div className="mb-16 select-none overflow-hidden border-y border-white/5 py-5 md:mb-24">
-        <div className="flex w-max animate-marquee items-center gap-10 whitespace-nowrap">
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span
-              key={i}
-              className="flex items-center gap-10 font-display text-2xl font-semibold tracking-tight text-bone-faint md:text-4xl"
-            >
-              {item}
-              <span className="text-bone/40">✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
+      {/* Marquee band (GSAP-driven, skews with scroll velocity) */}
+      <Marquee items={marqueeItems} />
 
       <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-12 md:px-10">
         <Reveal className="md:col-span-3">

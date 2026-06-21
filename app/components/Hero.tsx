@@ -1,14 +1,83 @@
+"use client";
+
 import Image from "next/image";
+import { useRef } from "react";
+import { gsap, useGSAP } from "../lib/gsap";
 
 export default function Hero() {
+  const root = useRef<HTMLElement | null>(null);
+
+  useGSAP(
+    () => {
+      const reduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      if (reduce) {
+        gsap.set(".hero-status, .hero-avatar, .hero-word, .hero-sub, .hero-cue", {
+          opacity: 1,
+          y: 0,
+          yPercent: 0,
+          scale: 1,
+        });
+        return;
+      }
+
+      // Entrance timeline
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.fromTo(
+        ".hero-status",
+        { y: -16, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7 }
+      )
+        .fromTo(
+          ".hero-avatar",
+          { scale: 0.82, opacity: 0, y: 24 },
+          { scale: 1, opacity: 1, y: 0, duration: 1.1, ease: "back.out(1.4)" },
+          "-=0.15"
+        )
+        .fromTo(
+          ".hero-word",
+          { yPercent: 45, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 1.1, ease: "power4.out" },
+          "-=0.85"
+        )
+        .fromTo(
+          ".hero-sub",
+          { y: 24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.55"
+        )
+        .fromTo(
+          ".hero-cue",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.6 },
+          "-=0.25"
+        );
+
+      // Parallax on scroll
+      const st = {
+        trigger: root.current!,
+        start: "top top",
+        end: "bottom top",
+        scrub: 0.6,
+      };
+      gsap.to(".hero-avatar", { y: -70, ease: "none", scrollTrigger: st });
+      gsap.to(".hero-word", { y: 44, ease: "none", scrollTrigger: st });
+      gsap.to(".hero-glow", { opacity: 0.3, ease: "none", scrollTrigger: st });
+    },
+    { scope: root, dependencies: [] }
+  );
+
   return (
     <section
+      ref={root}
       id="top"
       className="relative flex min-h-svh flex-col overflow-hidden px-6 pb-16 pt-10 md:px-10 md:pt-12"
     >
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col">
         {/* Status row */}
-        <div className="flex animate-fade-up items-center justify-between font-mono text-[11px] uppercase tracking-[0.25em] text-bone-faint">
+        <div className="hero-status flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.25em] text-bone-faint">
           <span className="flex items-center gap-2">
             <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[#39ff14] shadow-[0_0_8px_#39ff14]" />
             Available — 2026
@@ -19,23 +88,29 @@ export default function Hero() {
         {/* Centerpiece — wordmark behind, avatar in front (text passes behind the head) */}
         <div className="relative flex flex-1 flex-col items-center justify-center">
           {/* Ambient glow — centered on the avatar */}
-          <div className="glow-radial pointer-events-none absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2" />
+          <div className="hero-glow glow-radial pointer-events-none absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2" />
 
-          {/* Avatar: stacked above on mobile, absolutely centered & on top from md */}
+          {/* Avatar positioning wrapper (CSS only) */}
           <div className="z-10 mb-[-1.5rem] md:absolute md:left-1/2 md:top-1/2 md:mb-0 md:-translate-x-1/2 md:-translate-y-1/2">
-            <Image
-              src="/3D Head_no-background.png"
-              alt="Joenvyme — 3D avatar"
-              width={620}
-              height={620}
-              priority
-              className="animate-float h-auto w-[64vw] max-w-[360px] drop-shadow-[0_25px_70px_rgba(0,0,0,0.8)] md:w-[37vw] md:max-w-[480px]"
-            />
+            {/* GSAP-animated avatar */}
+            <div className="hero-avatar" style={{ opacity: 0 }}>
+              <Image
+                src="/3D Head_no-background.png"
+                alt="Joenvyme — 3D avatar"
+                width={620}
+                height={620}
+                priority
+                className="animate-float h-auto w-[64vw] max-w-[360px] drop-shadow-[0_25px_70px_rgba(0,0,0,0.8)] md:w-[37vw] md:max-w-[480px]"
+              />
+            </div>
           </div>
 
           {/* Wordmark behind */}
           <h1 className="relative z-0 select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest text-chalk">
-            <span className="block animate-fade-up whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]">
+            <span
+              className="hero-word block whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]"
+              style={{ opacity: 0 }}
+            >
               JOENVYME
             </span>
           </h1>
@@ -43,8 +118,8 @@ export default function Hero() {
 
         {/* Subtitle row */}
         <div
-          className="mt-6 flex animate-fade-up flex-col items-center gap-6 text-center md:flex-row md:items-end md:justify-between md:text-left"
-          style={{ animationDelay: "200ms" }}
+          className="hero-sub mt-6 flex flex-col items-center gap-6 text-center md:flex-row md:items-end md:justify-between md:text-left"
+          style={{ opacity: 0 }}
         >
           <div>
             <p className="font-graffiti text-3xl leading-none text-bone md:text-5xl">
@@ -67,7 +142,8 @@ export default function Hero() {
       {/* Scroll cue */}
       <a
         href="#identity"
-        className="relative z-10 mx-auto mt-8 font-mono text-[10px] uppercase tracking-[0.3em] text-bone-faint transition-colors hover:text-bone"
+        className="hero-cue relative z-10 mx-auto mt-8 font-mono text-[10px] uppercase tracking-[0.3em] text-bone-faint transition-colors hover:text-bone"
+        style={{ opacity: 0 }}
       >
         ↓ Scroll
       </a>
