@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Syne, Space_Mono, Inter } from "next/font/google";
+import { Syne, Space_Mono, Inter, Sedgwick_Ave_Display } from "next/font/google";
 import "./globals.css";
 
 const syne = Syne({
@@ -19,6 +19,13 @@ const spaceMono = Space_Mono({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const graffiti = Sedgwick_Ave_Display({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-graffiti",
   display: "swap",
 });
 
@@ -44,7 +51,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${syne.variable} ${spaceMono.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${syne.variable} ${spaceMono.variable} ${inter.variable} ${graffiti.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

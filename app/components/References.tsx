@@ -3,7 +3,7 @@ import Reveal from "./Reveal";
 
 export default function References() {
   return (
-    <section id="references" className="relative border-t border-white/5 py-28 md:py-40">
+    <section id="references" className="relative border-t border-white/5 py-20 md:py-40">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <Reveal>

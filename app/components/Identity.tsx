@@ -14,9 +14,9 @@ const marqueeItems = [
 
 export default function Identity() {
   return (
-    <section id="identity" className="relative border-t border-white/5 py-28 md:py-40">
+    <section id="identity" className="relative border-t border-white/5 py-20 md:py-40">
       {/* Marquee band */}
-      <div className="mb-24 select-none overflow-hidden border-y border-white/5 py-5">
+      <div className="mb-16 select-none overflow-hidden border-y border-white/5 py-5 md:mb-24">
         <div className="flex w-max animate-marquee items-center gap-10 whitespace-nowrap">
           {[...marqueeItems, ...marqueeItems].map((item, i) => (
             <span
@@ -59,7 +59,7 @@ export default function Identity() {
             </p>
           </Reveal>
 
-          <Reveal className="mt-14 flex flex-wrap gap-x-12 gap-y-6" delay={200}>
+          <Reveal className="mt-14 flex flex-wrap gap-x-10 gap-y-6 sm:gap-x-12" delay={200}>
             {[
               { k: "05+", v: "Products shipped" },
               { k: "100%", v: "Concept → Live" },

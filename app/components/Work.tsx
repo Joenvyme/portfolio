@@ -1,9 +1,12 @@
 import { projects } from "./data";
 import Reveal from "./Reveal";
 
+const NOISE =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
 export default function Work() {
   return (
-    <section id="work" className="relative border-t border-white/5 py-28 md:py-40">
+    <section id="work" className="relative border-t border-white/5 py-20 md:py-40">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <Reveal>
@@ -16,60 +19,80 @@ export default function Work() {
           </Reveal>
           <Reveal delay={120}>
             <p className="max-w-xs text-sm leading-relaxed text-bone-dim">
-              Each row opens the live project directly. No detours — the product
+              Each card opens the live project directly. No detours — the product
               speaks for itself.
             </p>
           </Reveal>
         </div>
 
-        <div className="mt-16 border-t border-white/10">
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, i) => (
-            <Reveal key={project.name} delay={i * 70}>
+            <Reveal key={project.name} delay={(i % 3) * 90}>
               <a
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative block border-b border-white/10 py-8 transition-colors duration-500 hover:bg-white/[0.02] md:py-10"
+                className="group relative flex h-full min-h-[440px] flex-col overflow-hidden rounded-3xl border border-white/10"
               >
-                <div className="grid grid-cols-12 items-baseline gap-4 px-1 md:px-4">
-                  <span className="col-span-2 font-mono text-xs text-bone-faint md:col-span-1">
-                    {project.index}
-                  </span>
+                {/* Colored mesh gradient */}
+                <div
+                  className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105"
+                  style={{ backgroundImage: project.gradient }}
+                />
+                {/* Grain / texture */}
+                <div
+                  className="absolute inset-0 opacity-[0.32] mix-blend-overlay"
+                  style={{ backgroundImage: NOISE, backgroundSize: "180px 180px" }}
+                />
+                <div
+                  className="absolute inset-0 opacity-[0.16] mix-blend-soft-light"
+                  style={{ backgroundImage: NOISE, backgroundSize: "320px 320px" }}
+                />
+                {/* Dark fade for legibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/35 to-transparent" />
 
-                  <div className="col-span-10 md:col-span-5">
-                    <h3 className="font-display text-3xl font-bold tracking-tight text-chalk transition-transform duration-500 group-hover:-translate-y-0.5 md:text-5xl">
-                      {project.name}
-                    </h3>
-                    <span className="mt-1 inline-block font-mono text-[11px] uppercase tracking-[0.18em] text-bone-faint">
-                      {project.domain} ↗
-                    </span>
+                {/* Top row */}
+                <div className="relative z-10 flex items-start justify-between p-6">
+                  <div className="rounded-xl bg-chalk px-3 py-2 text-ink-950">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-600">
+                      {project.year}
+                    </div>
+                    <div className="font-display text-2xl font-extrabold leading-none">
+                      {project.index}
+                    </div>
                   </div>
-
-                  <p className="col-span-12 max-w-xl text-balance text-sm leading-relaxed text-bone-dim md:col-span-5 md:col-start-7">
-                    {project.teaser}
-                  </p>
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-white/15 text-lg text-white backdrop-blur-md transition-colors group-hover:bg-white/25">
+                    ↗
+                  </span>
                 </div>
 
-                <div className="mt-5 flex items-center justify-between px-1 md:px-4">
-                  <div className="flex flex-wrap gap-2">
+                {/* Bottom content */}
+                <div className="relative z-10 mt-auto flex flex-col p-6">
+                  <div className="mb-4 flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-white/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-bone-dim"
+                        className="rounded-full border border-white/20 bg-white/5 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/80 backdrop-blur-sm"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <span className="font-mono text-xs text-bone-faint">
-                    {project.year}
+
+                  <h3 className="font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
+                    {project.name}
+                  </h3>
+                  <p className="mt-2 text-balance text-sm leading-relaxed text-white/75">
+                    {project.teaser}
+                  </p>
+
+                  <span className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-chalk px-5 py-3 font-mono text-xs uppercase tracking-[0.15em] text-ink-950 transition-transform duration-300 group-hover:-translate-y-0.5">
+                    Visit {project.domain}
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                      ↗
+                    </span>
                   </span>
                 </div>
-
-                {/* Hover arrow */}
-                <span className="pointer-events-none absolute right-2 top-8 text-bone opacity-0 transition-all duration-500 group-hover:right-4 group-hover:opacity-100 md:right-4">
-                  <span className="font-display text-3xl">→</span>
-                </span>
               </a>
             </Reveal>
           ))}

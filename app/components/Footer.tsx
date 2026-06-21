@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="relative border-t border-white/5 px-6 py-28 md:px-10 md:py-40"
+      className="relative border-t border-white/5 px-6 py-24 md:px-10 md:py-40"
     >
       <div className="glow-radial pointer-events-none absolute inset-x-0 top-0 mx-auto h-[40vmin] w-[60vmin]" />
 
@@ -64,7 +64,7 @@ export default function Footer() {
           </div>
         </Reveal>
 
-        <div className="mt-20 flex flex-col items-center justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.2em] text-bone-faint md:flex-row">
+        <div className="mt-16 flex flex-col items-start justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-bone-faint md:mt-20 md:flex-row md:items-center">
           <span>© {new Date().getFullYear()} Joenvyme — Creative Developer</span>
           <span>Neuchâtel · Switzerland</span>
         </div>

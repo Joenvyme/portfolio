@@ -28,6 +28,7 @@ const config: Config = {
         display: ["var(--font-syne)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        graffiti: ["var(--font-graffiti)", "var(--font-syne)", "cursive"],
       },
       letterSpacing: {
         tightest: "-0.05em",
