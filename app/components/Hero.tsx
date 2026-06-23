@@ -14,7 +14,7 @@ export default function Hero() {
       ).matches;
 
       if (reduce) {
-        gsap.set(".hero-status, .hero-avatar, .hero-word, .hero-sub, .hero-cue", {
+        gsap.set(".hero-status, .hero-avatar, .hero-word, .hero-word-outline, .hero-sub, .hero-cue", {
           opacity: 1,
           y: 0,
           yPercent: 0,
@@ -37,7 +37,7 @@ export default function Hero() {
           "-=0.15"
         )
         .fromTo(
-          ".hero-word",
+          ".hero-word, .hero-word-outline",
           { yPercent: 45, opacity: 0 },
           { yPercent: 0, opacity: 1, duration: 1.1, ease: "power4.out" },
           "-=0.85"
@@ -63,7 +63,7 @@ export default function Hero() {
         scrub: 0.6,
       };
       gsap.to(".hero-avatar", { y: -70, ease: "none", scrollTrigger: st });
-      gsap.to(".hero-word", { y: 44, ease: "none", scrollTrigger: st });
+      gsap.to(".hero-word, .hero-word-outline", { y: 44, ease: "none", scrollTrigger: st });
       gsap.to(".hero-glow", { opacity: 0.3, ease: "none", scrollTrigger: st });
     },
     { scope: root, dependencies: [] }
@@ -90,9 +90,53 @@ export default function Hero() {
           {/* Ambient glow — centered on the avatar */}
           <div className="hero-glow glow-radial pointer-events-none absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2" />
 
-          {/* Avatar positioning wrapper (CSS only) */}
-          <div className="z-10 mb-[-1.5rem] md:absolute md:left-1/2 md:top-1/2 md:mb-0 md:-translate-x-1/2 md:-translate-y-1/2">
-            {/* GSAP-animated avatar */}
+          {/* Text container for proper positioning */}
+          <div className="relative">
+            {/* Base text layer (normal filled text) - z-0 */}
+            <h1 className="relative z-0 select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest text-chalk">
+              <span
+                className="hero-word block whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]"
+                style={{ opacity: 0 }}
+              >
+                JOENVYME
+              </span>
+            </h1>
+
+            {/* Outline text layer - only visible where avatar is - z-20 */}
+            <div 
+              className="pointer-events-none absolute inset-0 z-20"
+              style={{
+                maskImage: 'url(/3D Head_no-background.png)',
+                maskSize: 'min(360px, 64vw) auto',
+                maskPosition: 'center',
+                maskRepeat: 'no-repeat',
+                WebkitMaskImage: 'url(/3D Head_no-background.png)',
+                WebkitMaskSize: 'min(360px, 64vw) auto',
+                WebkitMaskPosition: 'center',
+                WebkitMaskRepeat: 'no-repeat',
+              }}
+            >
+              <h1 
+                className="select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest"
+                aria-hidden="true"
+              >
+                <span
+                  className="hero-word-outline block whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]"
+                  style={{ 
+                    opacity: 0,
+                    WebkitTextStroke: '2px white',
+                    WebkitTextFillColor: 'transparent',
+                    color: 'transparent'
+                  }}
+                >
+                  JOENVYME
+                </span>
+              </h1>
+            </div>
+          </div>
+
+          {/* Avatar layer - z-10 */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 mb-[-1.5rem] -translate-x-1/2 -translate-y-1/2 md:mb-0">
             <div className="hero-avatar" style={{ opacity: 0 }}>
               <Image
                 src="/3D Head_no-background.png"
@@ -104,16 +148,6 @@ export default function Hero() {
               />
             </div>
           </div>
-
-          {/* Wordmark behind */}
-          <h1 className="relative z-0 select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest text-chalk">
-            <span
-              className="hero-word block whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]"
-              style={{ opacity: 0 }}
-            >
-              JOENVYME
-            </span>
-          </h1>
         </div>
 
         {/* Subtitle row */}
