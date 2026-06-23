@@ -109,9 +109,9 @@ export default function Hero() {
               </span>
             </h1>
 
-            {/* Outline text layer - positioned over base text, masked by avatar shape */}
+            {/* Outline text layer - positioned over base text, masked by avatar shape (desktop only) */}
             <div 
-              className="hero-mask pointer-events-none absolute inset-0 flex items-center justify-center"
+              className="hero-mask pointer-events-none absolute inset-0 hidden items-center justify-center md:flex"
               style={{
                 maskImage: 'url(/3D Head_no-background.png)',
                 maskSize: 'min(360px, 64vw) auto',
