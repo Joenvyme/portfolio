@@ -65,6 +65,13 @@ export default function Hero() {
       gsap.to(".hero-avatar", { y: -70, ease: "none", scrollTrigger: st });
       gsap.to(".hero-word, .hero-word-outline", { y: 44, ease: "none", scrollTrigger: st });
       gsap.to(".hero-glow", { opacity: 0.3, ease: "none", scrollTrigger: st });
+      
+      // Animate mask position to follow avatar (avatar moves -70, text moves +44, diff = -114)
+      gsap.to(".hero-mask", { 
+        y: -114, // Offset to keep mask aligned with avatar
+        ease: "none", 
+        scrollTrigger: st 
+      });
     },
     { scope: root, dependencies: [] }
   );
@@ -90,40 +97,32 @@ export default function Hero() {
           {/* Ambient glow — centered on the avatar */}
           <div className="hero-glow glow-radial pointer-events-none absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2" />
 
-          {/* Base text layer (normal filled text) - z-0 */}
-          <h1 className="relative z-0 select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest text-chalk">
-            <span
-              className="hero-word block whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]"
-              style={{ opacity: 0 }}
+          {/* Text layers container (both base and outline share same position/animation) */}
+          <div className="relative z-0">
+            {/* Base text layer (normal filled text) */}
+            <h1 className="relative select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest text-chalk">
+              <span
+                className="hero-word block whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]"
+                style={{ opacity: 0 }}
+              >
+                JOENVYME
+              </span>
+            </h1>
+
+            {/* Outline text layer - positioned over base text, masked by avatar shape */}
+            <div 
+              className="hero-mask pointer-events-none absolute inset-0 flex items-center justify-center"
+              style={{
+                maskImage: 'url(/3D Head_no-background.png)',
+                maskSize: 'min(360px, 64vw) auto',
+                maskPosition: 'center',
+                maskRepeat: 'no-repeat',
+                WebkitMaskImage: 'url(/3D Head_no-background.png)',
+                WebkitMaskSize: 'min(360px, 64vw) auto',
+                WebkitMaskPosition: 'center',
+                WebkitMaskRepeat: 'no-repeat',
+              }}
             >
-              JOENVYME
-            </span>
-          </h1>
-
-          {/* Avatar layer - z-10 */}
-          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 mb-[-1.5rem] -translate-x-1/2 -translate-y-1/2 md:mb-0">
-            <div className="hero-avatar" style={{ opacity: 0 }}>
-              <Image
-                src="/3D Head_no-background.png"
-                alt="Joenvyme — 3D avatar"
-                width={620}
-                height={620}
-                priority
-                className="animate-float h-auto w-[64vw] max-w-[360px] drop-shadow-[0_25px_70px_rgba(0,0,0,0.8)] md:w-[37vw] md:max-w-[480px]"
-              />
-            </div>
-          </div>
-
-          {/* Outline text layer - z-20, clipped to avatar area using ellipse */}
-          <div 
-            className="pointer-events-none absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
-            style={{
-              clipPath: 'ellipse(min(180px, 32vw) min(220px, 39vw) at 50% 50%)',
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
               <h1 
                 className="select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest"
                 aria-hidden="true"
@@ -140,6 +139,20 @@ export default function Hero() {
                   JOENVYME
                 </span>
               </h1>
+            </div>
+          </div>
+
+          {/* Avatar layer - z-10 */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 mb-[-1.5rem] -translate-x-1/2 -translate-y-1/2 md:mb-0">
+            <div className="hero-avatar" style={{ opacity: 0 }}>
+              <Image
+                src="/3D Head_no-background.png"
+                alt="Joenvyme — 3D avatar"
+                width={620}
+                height={620}
+                priority
+                className="animate-float h-auto w-[64vw] max-w-[360px] drop-shadow-[0_25px_70px_rgba(0,0,0,0.8)] md:w-[37vw] md:max-w-[480px]"
+              />
             </div>
           </div>
         </div>
