@@ -90,32 +90,40 @@ export default function Hero() {
           {/* Ambient glow — centered on the avatar */}
           <div className="hero-glow glow-radial pointer-events-none absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2" />
 
-          {/* Text container for proper positioning */}
-          <div className="relative">
-            {/* Base text layer (normal filled text) - z-0 */}
-            <h1 className="relative z-0 select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest text-chalk">
-              <span
-                className="hero-word block whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]"
-                style={{ opacity: 0 }}
-              >
-                JOENVYME
-              </span>
-            </h1>
-
-            {/* Outline text layer - only visible where avatar is - z-20 */}
-            <div 
-              className="pointer-events-none absolute inset-0 z-20"
-              style={{
-                maskImage: 'url(/3D Head_no-background.png)',
-                maskSize: 'min(360px, 64vw) auto',
-                maskPosition: 'center',
-                maskRepeat: 'no-repeat',
-                WebkitMaskImage: 'url(/3D Head_no-background.png)',
-                WebkitMaskSize: 'min(360px, 64vw) auto',
-                WebkitMaskPosition: 'center',
-                WebkitMaskRepeat: 'no-repeat',
-              }}
+          {/* Base text layer (normal filled text) - z-0 */}
+          <h1 className="relative z-0 select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest text-chalk">
+            <span
+              className="hero-word block whitespace-nowrap text-[clamp(2.25rem,9.3vw,8rem)]"
+              style={{ opacity: 0 }}
             >
+              JOENVYME
+            </span>
+          </h1>
+
+          {/* Avatar layer - z-10 */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 mb-[-1.5rem] -translate-x-1/2 -translate-y-1/2 md:mb-0">
+            <div className="hero-avatar" style={{ opacity: 0 }}>
+              <Image
+                src="/3D Head_no-background.png"
+                alt="Joenvyme — 3D avatar"
+                width={620}
+                height={620}
+                priority
+                className="animate-float h-auto w-[64vw] max-w-[360px] drop-shadow-[0_25px_70px_rgba(0,0,0,0.8)] md:w-[37vw] md:max-w-[480px]"
+              />
+            </div>
+          </div>
+
+          {/* Outline text layer - z-20, clipped to avatar area using ellipse */}
+          <div 
+            className="pointer-events-none absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              clipPath: 'ellipse(min(180px, 32vw) min(220px, 39vw) at 50% 50%)',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
               <h1 
                 className="select-none text-center font-display font-extrabold leading-[0.82] tracking-tightest"
                 aria-hidden="true"
@@ -132,20 +140,6 @@ export default function Hero() {
                   JOENVYME
                 </span>
               </h1>
-            </div>
-          </div>
-
-          {/* Avatar layer - z-10 */}
-          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 mb-[-1.5rem] -translate-x-1/2 -translate-y-1/2 md:mb-0">
-            <div className="hero-avatar" style={{ opacity: 0 }}>
-              <Image
-                src="/3D Head_no-background.png"
-                alt="Joenvyme — 3D avatar"
-                width={620}
-                height={620}
-                priority
-                className="animate-float h-auto w-[64vw] max-w-[360px] drop-shadow-[0_25px_70px_rgba(0,0,0,0.8)] md:w-[37vw] md:max-w-[480px]"
-              />
             </div>
           </div>
         </div>
